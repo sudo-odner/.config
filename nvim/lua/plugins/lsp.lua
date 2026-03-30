@@ -11,7 +11,7 @@ return {
         local mason_lspconfig = require("mason-lspconfig")
         local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-        -- Setting view diagnistic status
+        -- Setting view diagnostici status
         vim.diagnostic.config({
             update_in_insert = false,
             virtual_text = {
@@ -21,13 +21,16 @@ return {
             underline = true,
             severity_sort = true,
             float = { border = "rounded" },
-        })
 
-        local signs = { Error = "󰅚 ", Warn = "󰀪 ", Hint = "󰌶 ", Info = "󰋽 " }
-        for type, icon in pairs(signs) do
-            local hl = "DiagnosticSign" .. type
-            vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-        end
+            signs = {
+                text = {
+                    [vim.diagnostic.severity.ERROR] = "󰅚 ",
+                    [vim.diagnostic.severity.WARN] = "󰀪 ",
+                    [vim.diagnostic.severity.HINT] = "󰌶 ",
+                    [vim.diagnostic.severity.INFO] = "󰋽 ",
+                },
+            },
+        })
 
         -- Setting global keymap on LSP
         local on_attach = function(_, bufnr)
