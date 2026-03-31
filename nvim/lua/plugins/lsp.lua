@@ -40,29 +40,28 @@ return {
                 local opts = { buffer = bufnr }
 
                 -- Navigation and information
-                vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-                vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+                vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = bufnr, desc = "Go to Definition" })
+                vim.keymap.set("n", "gr", vim.lsp.buf.references, { buffer = bufnr, desc = "Go to References" })
 
                 -- Hover with rounded border
                 vim.keymap.set("n", "K", function()
                     vim.lsp.buf.hover({ border = "rounded" })
-                end, opts)
+                end, { buffer = bufnr, desc = "Show Documentation" })
 
                 -- Signature help with rounded border
                 vim.keymap.set("i", "<C-k>", function()
                     vim.lsp.buf.signature_help({ border = "rounded" })
-                end, opts)
+                end, { buffer = bufnr, desc = "Show Signature Help" })
 
                 -- Diagnostic navigation (New 0.12+ jump API)
                 vim.keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end,
-                    { desc = "Previous Diagnostic" })
+                    { buffer = bufnr, desc = "Previous Diagnostic" })
                 vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end,
-                    { desc = "Next Diagnostic" })
+                    { buffer = bufnr, desc = "Next Diagnostic" })
 
                 -- Code actions and refactoring
-                vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, opts)
-                vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-
+                vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename Symbol" })
+                vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, { buffer = bufnr, desc = "Code Action" })
                 -- Toggle Inlay Hints (Neovim 0.10+)
                 if client and client:supports_method("textDocument/inlayHint") then
                     vim.keymap.set("n", "<leader>th", function()
