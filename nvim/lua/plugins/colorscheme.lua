@@ -7,6 +7,15 @@ return {
             require("gruvbox").setup({
                 terminal_colors = true,
                 overrides = {
+                    NormalFloat                 = { bg = "#282828" }, -- Чуть глубже основного фона
+                    FloatBorder                 = { fg = "#504945", bg = "#282828" },
+
+                    -- Если хочешь, чтобы текст внутри окна был читаемым
+                    FloatTitle                  = { fg = "#fabd2f", bold = true },
+                    GitSignsCurrentLineBlame    = { fg = "#a89984", italic = true },
+                    MipiIndentscopeSymbol       = { fg = "#504945" },
+                    IblIndens                   = { fg = "#3c3836" },
+                    IplWhitespace               = { fg = "#3c3836" },
                     -- Цвет циыфл без заднего фона
                     CursorLineNr                = { fg = "#fabd2f", bg = "none" },
                     -- Привязываем фон, колонки и иконок к фону номеров строк
@@ -23,7 +32,7 @@ return {
                     BlinkCmpSignatureHelp       = { link = "NormalFloat" },
                     BlinkCmpSignatureHelpBorder = { link = "FloatBorder" },
                     -- Делаем плавающие окна чуть более выразительными
-                    FloatBorder                 = { fg = "#ebdbb2" },
+                    -- FloatBorder                 = { fg = "#ebdbb2" },
                 },
             })
             vim.cmd("colorscheme gruvbox")

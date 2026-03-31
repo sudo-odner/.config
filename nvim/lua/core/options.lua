@@ -15,4 +15,3 @@ opt.expandtab      = true -- Превращать табы в пробелы (tr
 opt.mouse          = "a"  -- Включить мышь во всех режимах:
 
 opt.updatetime     = 200
-opt.ttyfast        = true
