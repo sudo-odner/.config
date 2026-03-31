@@ -56,7 +56,7 @@ return {
         signature = {
             enabled = true,
             window = {
-                border = "none",
+                border = "rounded",
                 direction_priority = { "s", "n" },
                 show_documentation = true,
             }
@@ -69,7 +69,7 @@ return {
             },
             -- Настройка списка
             menu = {
-                border = "none",
+                border = "rounded",
                 draw = {
                     treesitter = { "lsp" },
                     columns = { { "kind_icon", gap = 1 }, { "label", "label_description", gap = 1 } },
@@ -80,7 +80,7 @@ return {
             documentation = {
                 auto_show = true,
                 auto_show_delay_ms = 200,
-                window = { border = "none" },
+                window = { border = "rounded" },
             },
 
             -- Отображение фантомного текста
