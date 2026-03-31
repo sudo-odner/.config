@@ -58,6 +58,8 @@ return {
                     { buffer = bufnr, desc = "Previous Diagnostic" })
                 vim.keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end,
                     { buffer = bufnr, desc = "Next Diagnostic" })
+                vim.keymap.set("n", "<leader>cd", vim.diagnostic.open_float,
+                    { buffer = bufnr, desc = "Line Diagnostics" })
 
                 -- Code actions and refactoring
                 vim.keymap.set("n", "<leader>cr", vim.lsp.buf.rename, { buffer = bufnr, desc = "Rename Symbol" })
