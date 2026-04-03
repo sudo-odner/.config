@@ -1,19 +1,51 @@
+-- lua/plugins/animate.lua: LazyVim-style animations
 return {
     "echasnovski/mini.animate",
     event = "VeryLazy",
+    cond = function()
+        return vim.g.neovide == nil
+    end,
     opts = function()
         local animate = require("mini.animate")
+
+        -- Логика для отключения анимации при скролле мышью
+        local mouse_scrolled = false
+        for _, scroll in ipairs({ "Up", "Down" }) do
+            local key = "<ScrollWheel" .. scroll .. ">"
+            vim.keymap.set({ "", "i" }, key, function()
+                mouse_scrolled = true
+                return key
+            end, { expr = true })
+        end
+
+        -- Отключаем анимацию для тяжелых плагинов (например, grug-far)
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = "grug-far",
+            callback = function()
+                vim.b.minianimate_disable = true
+            end,
+        })
+
         return {
-            -- Плавный скролл (самое заметное)
+            resize = {
+                timing = animate.gen_timing.linear({ duration = 50, unit = "total" }),
+            },
             scroll = {
-                enable = true,
                 timing = animate.gen_timing.linear({ duration = 150, unit = "total" }),
+                subscroll = animate.gen_subscroll.equal({
+                    predicate = function(total_scroll)
+                        if mouse_scrolled then
+                            mouse_scrolled = false
+                            return false
+                        end
+                        return total_scroll > 1
+                    end,
+                }),
             },
-            -- Плавное движение курсора
-            cursor = {
-                enable = true,
-                timing = animate.gen_timing.linear({ duration = 80, unit = "total" }),
-            },
+            --cursor = {
+            --    enable = true,
+            --    timing = animate.gen_timing.linear({ duration = 80, unit = "total" }),
+            --},
         }
     end,
 }
