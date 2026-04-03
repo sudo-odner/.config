@@ -1,9 +1,9 @@
--- lua/plugins/lualine.lua: LazyVim-style statusline
+-- lua/plugins/lualine.lua: LazyVim-style statusline with breadcrumbs
 return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
+    dependencies = { "SmiteshP/nvim-navic" },
     opts = function()
-        -- Helper function to get diagnostic icons
         local icons = {
             Error = " ",
             Warn = " ",
@@ -32,25 +32,26 @@ return {
                             hint = icons.Hint,
                         },
                     },
-                    { "filetype", icon_only = true, separator = "", padding = { left = 1, right = 0 } },
-                    { "filename", path = 1 },
+                    { "filetype", icon_only = true, separator = "",   padding = { left = 1, right = 0 } },
+                    { "filename", path = 1,         separator = " > " },
+                    -- Добавляем хлебные крошки (функции, классы) прямо в статусную строку
+                    {
+                        function()
+                            return require("nvim-navic").get_location()
+                        end,
+                        cond = function()
+                            return package.loaded["nvim-navic"] and require("nvim-navic").is_available()
+                        end,
+                    },
                 },
                 lualine_x = {
-                    -- Показывает статус записи макроса или поиска (через Noice)
                     {
                         function() return require("noice").api.status.command.get() end,
                         cond = function() return package.loaded["noice"] and require("noice").api.status.command.has() end,
-                        color = { fg = "#ff9e64" },
                     },
                     {
                         function() return require("noice").api.status.mode.get() end,
                         cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
-                        color = { fg = "#ff9e64" },
-                    },
-                    {
-                        function() return " " .. require("noice").api.status.search.get() end,
-                        cond = function() return package.loaded["noice"] and require("noice").api.status.search.has() end,
-                        color = { fg = "#ff9e64" },
                     },
                     {
                         "diff",
@@ -62,7 +63,7 @@ return {
                     },
                 },
                 lualine_y = {
-                    { "progress", separator = " ", padding = { left = 1, right = 0 } },
+                    { "progress", separator = " ",                  padding = { left = 1, right = 0 } },
                     { "location", padding = { left = 0, right = 1 } },
                 },
                 lualine_z = {
