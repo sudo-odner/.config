@@ -53,8 +53,8 @@ return {
                 disable_diagnostics = false,
                 debug = false,
                 highlights = {
-                    incoming = 'GitConflictIncoming',
-                    current = 'GitConflictCurrent',
+                    incoming = 'DiffAdd',
+                    current = 'DiffText',
                 },
             })
 
