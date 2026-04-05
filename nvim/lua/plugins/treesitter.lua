@@ -1,30 +1,16 @@
--- lua/plugins/treesitter.lua For install and configuration nvim-treesitter
 return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
+    lazy = false,
     config = function()
-        require("nvim-treesitter").setup({
-            ensure_installed = {
-                "vim",
-                "bash",
-                "lua",
-                "go",
-                "python",
-                "typescript",
-                "tsx",
-                "html",
-                "json",
-                "yaml",
-                "regex",
-                "markdown",
-                "markdown_inline"
-            },
-            highlight = {
-                enable = true,
-                additional_vim_regex_highlighting = false,
-            },
-            indent = { enable = false },
-            auto_install = true,
+        local configs = require("nvim-treesitter")
+        configs.install({ "go", "lua", "vim", "vimdoc", "query", "python", "javascript" })
+
+        -- Включение подсветки через автокоманду
+        vim.api.nvim_create_autocmd("FileType", {
+            callback = function()
+                pcall(vim.treesitter.start)
+            end,
         })
     end,
 }
