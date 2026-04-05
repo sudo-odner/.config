@@ -8,8 +8,8 @@ keymap.set("n", "<leader>sv", "<cmd>source %<cr>", { desc = "Source current file
 -- Сохранить файл
 keymap.set("n", "<leader>w", "<cmd>w<cr>", { desc = "Save file" })
 
--- Выйти из файла
-keymap.set("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
+-- Выйти из редактора (Сохранить всё и выйти)
+keymap.set("n", "<leader>q", "<cmd>wqa<cr>", { desc = "Save all and Quit" }) -- test some
 
 -- Убрать подсветку поиска
 keymap.set("n", "<leader>nh", "<cmd>nohlsearch<cr>", { desc = "No highlight" })
@@ -29,5 +29,21 @@ keymap.set("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next Buffer" })
 -- Быстрый переход к последнему буферу
 keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" })
 
--- Список открытых буферов через Telescope
-keymap.set("n", "<leader>,", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", { desc = "Switch Buffer" })
+-- Закрывать вспомогательные окна по нажатию 'q'
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = {
+        "qf",
+        "help",
+        "man",
+        "notify",
+        "lspinfo",
+        "spectre_panel",
+        "startuptime",
+        "tsplayground",
+        "PlenaryTestPopup",
+    },
+    callback = function(event)
+        vim.bo[event.buf].buflisted = false
+        vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+    end,
+})

@@ -21,3 +21,6 @@ opt.smoothscroll   = true          -- Плавный скролл длинных
 
 opt.updatetime     = 200
 opt.confirm        = true -- Подтверждение перед закрытием несохраненного файла
+
+-- Сохранение истории отмены (undo/redo) даже после выхода из Neovim
+opt.undofile       = true
