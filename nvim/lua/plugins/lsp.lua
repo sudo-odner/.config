@@ -62,10 +62,10 @@ return {
                     end
 
                     -- Dev keymaps
-                    map("gd", vim.lsp.buf.definition, "Goto Definition")
-                    map("gr", vim.lsp.buf.references, "Goto References")
-                    map("gI", vim.lsp.buf.implementation, "Goto Implementation")
-                    map("<leader>D", vim.lsp.buf.type_definition, "Type Definition")
+                    map("gd", "<cmd>Telescope lsp_definitions<CR>", "Goto Definition (Telescope)")
+                    map("gr", "<cmd>Telescope lsp_references<CR>", "Goto References (Telescope)")
+                    map("gI", "<cmd>Telescope lsp_implementations<CR>", "Goto Implementation (Telescope)")
+                    map("<leader>D", "<cmd>Telescope lsp_type_definitions<CR>", "Type Definition (Telescope)")
                     map("<leader>rn", vim.lsp.buf.rename, "Rename")
                     map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
                     map("K", vim.lsp.buf.hover, "Hover Documentation")
@@ -75,11 +75,11 @@ return {
                     map("<leader>d", vim.diagnostic.open_float, "Open Diagnostic Float")
                     map("[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, "Previous Diagnostic")
                     map("]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, "Next Diagnostic")
-                    map("<leader>q", vim.diagnostic.setqflist, "Open Diagnostic Quickfix")
+                    map("<leader>dq", vim.diagnostic.setqflist, "Open Diagnostic Quickfix")
 
                     -- For On/Off Inlay Hints (sum(int: a, int: b)/sum(a, b))
                     if client and client:supports_method("textDocument/inlayHint") then
-                        map("<leader>th",
+                        map("<leader>tih",
                             function() vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })) end,
                             "Toggle Inlay Hints")
                         vim.lsp.inlay_hint.enable(false, { bufnr = bufnr }) -- defalut enable
