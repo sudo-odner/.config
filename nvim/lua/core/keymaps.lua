@@ -9,7 +9,10 @@ keymap.set("n", "<leader>sv", "<cmd>source %<cr>", { desc = "Source current file
 keymap.set("n", "<leader>w", "<cmd>w<cr>", { desc = "Save file" })
 
 -- Выйти из редактора (Сохранить всё и выйти)
-keymap.set("n", "<leader>q", "<cmd>wqa<cr>", { desc = "Save all and Quit" }) -- test some
+keymap.set("n", "<leader>q", "<cmd>wqa<cr>", { desc = "Save all and Quit" })
+
+-- Выйти из редактора (Не сохраняя ничего)
+keymap.set("n", "<leader>Q", "<cmd>q!<cr>", { desc = "Save all and Quit" })
 
 -- Убрать подсветку поиска
 keymap.set("n", "<leader>nh", "<cmd>nohlsearch<cr>", { desc = "No highlight" })
