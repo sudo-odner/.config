@@ -9,3 +9,15 @@ macos-option-as-alt = true
 background-opacity = 1
 
 term = xterm-256color
+
+# Перемещение между сплинами like vim hjkl
+keybind = super+h=goto_split:left
+keybind = super+j=goto_split:bottom
+keybind = super+k=goto_split:top
+keybind = super+l=goto_split:right
+
+# Перемещение сплинов like vim hjkl 
+keybind = super+shift+h=split:move_left
+keybind = super+shift+j=split:move_bottom
+keybind = super+shift+k=split:move_top
+keybind = super+shift+l=split:move_right
