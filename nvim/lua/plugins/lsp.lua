@@ -115,7 +115,12 @@ return {
 				rust_analyzer = {}, -- Rust
 				pyright = {}, -- Python
 				dockerls = {}, -- Docker
-				nginx_language_server = {}, -- Nginx
+				nginx_language_server = {}, -- nginx_language_server
+				buf_ls = { -- Protobuf
+					cmd = { "buf", "lsp", "serve" },
+					filetypes = { "proto" },
+					root_dir = require("lspconfig.util").root_pattern("buf.yaml", "buf.gen.yaml", ".git", "go.mod"),
+				},
 			}
 
 			mason_lspconfig.setup({
