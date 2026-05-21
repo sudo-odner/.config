@@ -54,6 +54,19 @@ return {
 						vim.diagnostic.jump({ count = 1, float = true })
 					end, "Next Diagnostic")
 
+					-- Копирование ошибки в системный буфеp
+					map("<leader>dy", function()
+						local diagnostics = vim.diagnostic.get(0, { lnum = vim.api.nvim_win_get_cursor(0)[1] - 1 })
+						if vim.tbl_isempty(diagnostics) then
+							vim.notify("No diagnostics on this line", vim.log.levels.INFO)
+							return
+						end
+						-- Берем первую ошибку на строке и копируем её
+						local msg = diagnostics[1].message
+						vim.fn.setreg("+", msg)
+						vim.notify("Error copied to clipboard!", vim.log.levels.INFO)
+					end, "Copy Diagnostic Message")
+
 					-- Intergration: Add breadcrums if LSP supporterd mehtod
 					if client and client:supports_method("textDocument/documentSymbol") then
 						require("nvim-navic").attach(client, bufnr)
