@@ -38,7 +38,9 @@ return {
 					map("gd", "<cmd>Telescope lsp_definitions<CR>", "Goto Definition")
 					map("gr", "<cmd>Telescope lsp_references<CR>", "Goto References")
 					map("gI", "<cmd>Telescope lsp_implementations<CR>", "Goto Implementation")
-					map("K", vim.lsp.buf.hover, "Hover Documentation")
+					map("K", function()
+						vim.lsp.buf.hover({ border = "rounded" })
+					end, "Hover Documentation")
 					map("gD", vim.lsp.buf.declaration, "Goto Declaration")
 					map("<leader>rn", vim.lsp.buf.rename, "Rename Symbol")
 					map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
@@ -162,6 +164,7 @@ return {
 					auto_show = true,
 					auto_show_delay_ms = 200,
 					window = { border = "rounded" },
+					winblend = 0,
 				},
 				ghost_text = { enabled = true },
 			},
