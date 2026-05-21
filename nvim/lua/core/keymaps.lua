@@ -12,7 +12,7 @@ keymap.set("n", "<leader>w", "<cmd>w<cr>", { desc = "Save file" })
 keymap.set("n", "<leader>q", "<cmd>wqa<cr>", { desc = "Save all and Quit" })
 
 -- Выйти из редактора (Не сохраняя ничего)
-keymap.set("n", "<leader>Q", "<cmd>q!<cr>", { desc = "Save all and Quit" })
+keymap.set("n", "<leader>Q", "<cmd>q!<cr>", { desc = "Quit" })
 
 -- Убрать подсветку поиска
 keymap.set("n", "<leader>nh", "<cmd>nohlsearch<cr>", { desc = "No highlight" })
@@ -34,19 +34,19 @@ keymap.set("n", "<leader>bb", "<cmd>e #<cr>", { desc = "Switch to Other Buffer" 
 
 -- Закрывать вспомогательные окна по нажатию 'q'
 vim.api.nvim_create_autocmd("FileType", {
-    pattern = {
-        "qf",
-        "help",
-        "man",
-        "notify",
-        "lspinfo",
-        "spectre_panel",
-        "startuptime",
-        "tsplayground",
-        "PlenaryTestPopup",
-    },
-    callback = function(event)
-        vim.bo[event.buf].buflisted = false
-        vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
-    end,
+	pattern = {
+		"qf",
+		"help",
+		"man",
+		"notify",
+		"lspinfo",
+		"spectre_panel",
+		"startuptime",
+		"tsplayground",
+		"PlenaryTestPopup",
+	},
+	callback = function(event)
+		vim.bo[event.buf].buflisted = false
+		vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+	end,
 })
