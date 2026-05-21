@@ -1,50 +1,29 @@
--- lua/plugins/lsp.lua: For Install and Setup LSP server (and other atocomplete, breadcrumbs, etx)
+-- lua/plugins/lsp.lua: For install and steup LSP server (with plugins for better client Lua, blink(autocpmlete), breadcrums)
 return {
 	{
-		-- For develop vim on lua (default global vim. and etc)
-		"folke/lazydev.nvim",
-		ft = "lua",
-		opts = {
-			library = {
-				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
-			},
-		},
-	},
-	{
-		-- LSP
+		-- Setting LSP server
 		"neovim/nvim-lspconfig",
 		dependencies = {
-			{ "williamboman/mason.nvim", config = true }, -- Portable package manager
-			"williamboman/mason-lspconfig.nvim", -- Bridges mason.nvim with lspconfig
-			"saghen/blink.cmp",
+			{ "williamboman/mason.nvim", config = true },
+			"williamboman/mason-lspconfig.nvim",
+			"blink.cmp",
 		},
 		config = function()
 			local mason_lspconfig = require("mason-lspconfig")
 			local lspconfig = require("lspconfig")
+			-- capabilities берем для того чтобыпонимать кокой lsp и какие инстремены поддерживает
 			local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-			-- Configure diagnostic display settings
+			-- 1. Настройка отображения ошибок
 			vim.diagnostic.config({
 				update_in_insert = false,
-				virtual_text = {
-					prefix = "●",
-					spacing = 4,
-				},
+				virtual_text = { prefix = "●", spacing = 4 },
 				underline = true,
 				severity_sort = true,
 				float = { border = "rounded" },
-
-				-- signs = {
-				--    text = {
-				--        [vim.diagnostic.severity.ERROR] = "󰅚 ",
-				--        [vim.diagnostic.severity.WARN] = "󰀪 ",
-				--        [vim.diagnostic.severity.HINT] = "󰌶 ",
-				--        [vim.diagnostic.severity.INFO] = "󰋽 ",
-				--    },
-				--},
 			})
 
-			-- this function runs when an lsp connects to a particular buffer.
+			-- 2. Настройка keymap и фич LSP сервера (Что делать, когда сервер подключился к файлу (бинды клавиш)
 			vim.api.nvim_create_autocmd("LspAttach", {
 				group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
 				callback = function(event)
@@ -55,55 +34,42 @@ return {
 						vim.keymap.set("n", keys, func, { buffer = bufnr, desc = "LSP: " .. desc })
 					end
 
-					-- For breadcrumbs
-					if client and client.server_capabilities.documentSymbolProvider then
-						require("nvim-navic").attach(client, bufnr)
-					end
-
-					-- Dev keymaps
-					map("gd", "<cmd>Telescope lsp_definitions<CR>", "Goto Definition (Telescope)")
-					map("gr", "<cmd>Telescope lsp_references<CR>", "Goto References (Telescope)")
-					map("gI", "<cmd>Telescope lsp_implementations<CR>", "Goto Implementation (Telescope)")
-					map("<leader>D", "<cmd>Telescope lsp_type_definitions<CR>", "Type Definition (Telescope)")
-					map("<leader>rn", vim.lsp.buf.rename, "Rename")
-					map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
+					-- Keymap: Навигация и информация
+					map("gd", "<cmd>Telescope lsp_definitions<CR>", "Goto Definition")
+					map("gr", "<cmd>Telescope lsp_references<CR>", "Goto References")
+					map("gI", "<cmd>Telescope lsp_implementations<CR>", "Goto Implementation")
 					map("K", vim.lsp.buf.hover, "Hover Documentation")
 					map("gD", vim.lsp.buf.declaration, "Goto Declaration")
+					map("<leader>rn", vim.lsp.buf.rename, "Rename Symbol")
+					map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
 
-					-- Diagnostic keymaps
+					-- Keymap: Диагностика ошибок
 					map("<leader>d", vim.diagnostic.open_float, "Open Diagnostic Float")
 					map("[d", function()
 						vim.diagnostic.jump({ count = -1, float = true })
-					end, "Previous Diagnostic")
+					end, "Prev Diagnostic")
 					map("]d", function()
 						vim.diagnostic.jump({ count = 1, float = true })
 					end, "Next Diagnostic")
-					map("<leader>dq", vim.diagnostic.setqflist, "Open Diagnostic Quickfix")
 
-					-- For On/Off Inlay Hints (sum(int: a, int: b)/sum(a, b))
+					-- Intergration: Add breadcrums if LSP supporterd mehtod
+					if client and client:supports_method("textDocument/documentSymbol") then
+						require("nvim-navic").attach(client, bufnr)
+					end
+
+					-- Intergration: For On/Off Inlay Hints (sum(int: a, int: b)/sum(a, b))
 					if client and client:supports_method("textDocument/inlayHint") then
 						map("<leader>tih", function()
 							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr }))
 						end, "Toggle Inlay Hints")
 						vim.lsp.inlay_hint.enable(false, { bufnr = bufnr }) -- defalut enable
 					end
-
-					-- OLD: Version
-					-- Hover with rounded border
-					--vim.keymap.set("n", "K", function()
-					--    vim.lsp.buf.hover({ border = "rounded" })
-					--end, { buffer = bufnr, desc = "Show Documentation" })
-
-					-- Signature help with rounded border
-					--vim.keymap.set("i", "<C-k>", function()
-					--    vim.lsp.buf.signature_help({ border = "rounded" })
-					--end, { buffer = bufnr, desc = "Show Signature Help" })
 				end,
 			})
 
-			-- Defalut LSP servers
+			-- 4. Список устанавливаемых серверов
 			local LSPservers = {
-				lua_ls = { -- Lua
+				lua_ls = {
 					settings = {
 						Lua = {
 							completion = { callsnippet = "replace" },
@@ -111,32 +77,44 @@ return {
 						},
 					},
 				},
-				gopls = {}, -- Golang
-				rust_analyzer = {}, -- Rust
-				pyright = {}, -- Python
-				dockerls = {}, -- Docker
-				nginx_language_server = {}, -- nginx_language_server
-				buf_ls = { -- Protobuf
+				gopls = {},
+				rust_analyzer = {},
+				pyright = {},
+				dockerls = {},
+				nginx_language_server = {},
+				buf_ls = {
 					cmd = { "buf", "lsp", "serve" },
 					filetypes = { "proto" },
-					root_dir = require("lspconfig.util").root_pattern("buf.yaml", "buf.gen.yaml", ".git", "go.mod"),
+					root_dir = require("lspconfig.util").root_pattern("buf.yaml", "buf.gen.yaml", ".git"),
 				},
 			}
 
+			-- 5. Автоматическая установка и инициализация
 			mason_lspconfig.setup({
 				ensure_installed = vim.tbl_keys(LSPservers),
 				handlers = {
 					function(server_name)
-						lspconfig[server_name].setup({
-							capabilities = capabilities,
-						})
+						local server_opts = LSPservers[server_name] or {}
+						server_opts.capabilities =
+							vim.tbl_deep_extend("force", {}, capabilities, server_opts.capabilities or {})
+						lspconfig[server_name].setup(server_opts)
 					end,
 				},
 			})
 		end,
 	},
 	{
-		-- For autocomplete
+		-- Setting better support Lus clinet for nvim
+		"folke/lazydev.nvim",
+		ft = "lua",
+		opts = {
+			library = {
+				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+			},
+		},
+	},
+	{
+		-- Setting autocpmlete
 		"saghen/blink.cmp",
 		dependencies = { "rafamadriz/friendly-snippets" },
 		version = "1.*",
@@ -188,29 +166,9 @@ return {
 				ghost_text = { enabled = true },
 			},
 		},
-		-- Write only signature after '(' or ','
-		config = function(_, opts)
-			require("blink.cmp").setup(opts)
-
-			vim.api.nvim_create_autocmd("InsertCharPre", {
-				pattern = "*",
-				callback = function()
-					local char = vim.v.char
-					local blink = require("blink.cmp")
-
-					if char == "(" or char == "," then
-						vim.schedule(function()
-							blink.show_signature()
-						end)
-					elseif char:match("%w") then
-						blink.hide_signature()
-					end
-				end,
-			})
-		end,
 	},
 	{
-		-- For breadcrumbs
+		-- Setting breadcrumbs
 		"SmiteshP/nvim-navic",
 		dependencies = { "neovim/nvim-lspconfig" },
 		opts = {
