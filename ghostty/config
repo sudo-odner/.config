@@ -1,23 +1,19 @@
-theme = gruvbox-material-medium-dark
-
-font-feature = -calt
-font-feature = -liga
-font-feature = -dlig
+theme = Gruvbox Material Dark
 font-family = "JetBrainsMono Nerd Font"
 font-size = 12
-macos-option-as-alt = true
+
 background-opacity = 1
 
-term = xterm-256color
+font-feature = -calt # Отклбчает контекстные символы, символы одинаковой длинны
+font-feature = -liga # Отключает стандартные лигатуры, не обхеденяет символы '->'
+font-feature = -dlig # Тоже самое что и '-liga', но с редкими символоми такие как 'www'
 
-# Перемещение между сплинами like vim hjkl
+macos-option-as-alt = true # Заменяет нажатие option на MacOS в alt
+
+term = xterm-256color # Устанавливает стндартную тему цвета (для подклбчения по ssh, default: xterm-ghostty, который не все ssh понимает)
+
+# Перемещение между сплинами like vim super(cmd/windows)+hjkl
 keybind = super+h=goto_split:left
 keybind = super+j=goto_split:bottom
 keybind = super+k=goto_split:top
 keybind = super+l=goto_split:right
-
-# Перемещение сплинов like vim hjkl 
-keybind = super+shift+h=split:move_left
-keybind = super+shift+j=split:move_bottom
-keybind = super+shift+k=split:move_top
-keybind = super+shift+l=split:move_right
