@@ -13,7 +13,7 @@ return {
 					"isort",
 					"prettier",
 					"shfmt",
-					"buf_ls",
+					"buf",
 				},
 			})
 		end,
@@ -38,7 +38,7 @@ return {
 					lua = { "stylua" },
 					go = { "goimports", "gofumpt" },
 					python = { "isort", "black" },
-					proto = { "buf_ls" },
+					proto = { "buf" },
 
 					javascript = { "prettier" },
 					typescript = { "prettier" },

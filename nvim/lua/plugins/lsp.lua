@@ -84,7 +84,7 @@ return {
 				pyright = {},
 				dockerls = {},
 				nginx_language_server = {},
-				buf_ls = {
+				buf = {
 					cmd = { "buf", "lsp", "serve" },
 					filetypes = { "proto" },
 					root_dir = require("lspconfig.util").root_pattern("buf.yaml", "buf.gen.yaml", ".git"),
