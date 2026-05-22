@@ -1,0 +1,21 @@
+[user]
+    email = odner.main@gmail.com
+    name = sudo-odner
+
+[pull]
+    rebase = false
+
+[init]
+    defaultBranch = "main"
+
+[diff]
+    external = difft
+    algorithm = "histogram"
+    colorMoved = "plain"
+    colorMovedWS = "allow-indentation-change"
+    renames = true
+
+[merge]
+    conflictStyle = "zdiff3"
+
+[status]
