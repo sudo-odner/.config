@@ -3,7 +3,8 @@ local opt = vim.opt
 opt.number = true -- Показать номера строк
 opt.relativenumber = true -- Показать строки относительно текущей
 opt.signcolumn = "yes" -- Показывать колонку знков всегда
-opt.cursorline = true -- Вулючить подсветкустроки
+opt.cursorline = true -- Включить подсветку строки
+opt.colorcolumn = "100" -- Вертикальная линия-граница на 100 символов (для контроля длины строк)
 opt.numberwidth = 2
 opt.statuscolumn = "%s%=%{v:relnum == 0 ? v:lnum : v:relnum}   "
 
