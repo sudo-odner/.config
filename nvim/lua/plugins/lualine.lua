@@ -69,6 +69,21 @@ return {
 							removed = " ",
 						},
 					},
+					-- Отображение активных LSP-серверов
+					{
+						function()
+							local buf_clients = vim.lsp.get_clients({ bufnr = 0 })
+							if #buf_clients == 0 then
+								return "LSP: Off"
+							end
+							local client_names = {}
+							for _, client in ipairs(buf_clients) do
+								table.insert(client_names, client.name)
+							end
+							return "LSP: " .. table.concat(client_names, ", ")
+						end,
+						color = { fg = "#cdd6f4", gui = "bold" },
+					},
 				},
 				lualine_y = {
 					{ "progress", separator = " ", padding = { left = 1, right = 0 } },
